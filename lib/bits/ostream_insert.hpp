@@ -1,3 +1,14 @@
+/**
+ * @file ostream_insert.hpp
+ * @author Dante Barbieri (dante@barbieri.dev)
+ * @brief Provides helpers for the ostream, seen in GNU implementations of CXX
+ * @version 0.1
+ * @date 2021-03-25
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef _OSTREAM_INSERT_HPP_
 #define _OSTREAM_INSERT_HPP_
 

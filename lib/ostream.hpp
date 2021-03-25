@@ -1,3 +1,14 @@
+/**
+ * @file ostream.hpp
+ * @author Dante Barbieri (dante@barbieri.dev)
+ * @brief Analogous to the <ostream> header
+ * @version 0.1
+ * @date 2021-03-25
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef _OSTREAM_HPP_
 #define _OSTREAM_HPP_
 

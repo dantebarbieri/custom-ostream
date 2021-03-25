@@ -1,3 +1,14 @@
+/**
+ * @file climits.hpp
+ * @author Dante Barbieri (dante@barbieri.dev)
+ * @brief Analogous to the <climits> header
+ * @version 0.1
+ * @date 2021-03-25
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef _CLIMITS_HPP_
 #define _CLIMITS_HPP_
 

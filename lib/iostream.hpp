@@ -1,3 +1,14 @@
+/**
+ * @file iostream.hpp
+ * @author Dante Barbieri (dante@barbieri.dev)
+ * @brief Analogous to the <iostream> header
+ * @version 0.1
+ * @date 2021-03-25
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef _IOSTREAM_HPP_
 #define _IOSTREAM_HPP_
 

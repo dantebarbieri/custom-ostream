@@ -1,3 +1,14 @@
+/**
+ * @file ostream.tcc
+ * @author Dante Barbieri (dante@barbieri.dev)
+ * @brief Implementation of the ostream.hpp file
+ * @version 0.1
+ * @date 2021-03-25
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef _OSTREAM_TCC_
 #define _OSTREAM_TCC_
 

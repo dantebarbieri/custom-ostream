@@ -1,3 +1,14 @@
+/**
+ * @file char_traits.hpp
+ * @author Dante Barbieri (dante@barbieri.dev)
+ * @brief Analogous to the <char_traits> header
+ * @version 0.1
+ * @date 2021-03-25
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef _CHAR_TRAITS_HPP_
 #define _CHAR_TRAITS_HPP_
 

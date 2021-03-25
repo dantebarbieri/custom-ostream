@@ -1,3 +1,14 @@
+/**
+ * @file ios_base.hpp
+ * @author Dante Barbieri (dante@barbieri.dev)
+ * @brief Analogous to the <ios_base> header
+ * @version 0.1
+ * @date 2021-03-25
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef _IOS_BASE_HPP_
 #define _IOS_BASE_HPP_
 

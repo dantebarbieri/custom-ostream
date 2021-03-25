@@ -1,3 +1,14 @@
+/**
+ * @file limits.tcc
+ * @author Dante Barbieri (dante@barbieri.dev)
+ * @brief Implementations of the limits.hpp file
+ * @version 0.1
+ * @date 2021-03-25
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef _LIMITS_TCC_
 #define _LIMITS_TCC_
 

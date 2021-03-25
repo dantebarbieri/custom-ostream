@@ -1,7 +1,16 @@
+/**
+ * @file cstring.tcc
+ * @author Dante Barbieri (dante@barbieri.dev)
+ * @brief Implementations for cstring.hpp
+ * @version 0.1
+ * @date 2021-03-25
+ * 
+ * @copyright Copyright (c) 2021
+ * 
+ */
+
 #ifndef _CSTRING_TCC_
 #define _CSTRING_TCC_
-
-#include "string.hpp"
 
 #define forever for (;;)
 
