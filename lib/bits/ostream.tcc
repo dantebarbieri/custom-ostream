@@ -168,24 +168,6 @@ namespace dvb
             return (unsigned long)(number + 0.5);
         }
 
-        unsigned long get_mantissa(long double number, int precision, int base = 10)
-        {
-            unsigned long e = 1;
-            for (int i = 0; i < precision; ++i)
-            {
-                e *= base;
-            }
-            unsigned long magnitude = (unsigned long)number;
-            return round(e * (number - magnitude));
-        }
-
-        unsigned long trim_trailing_zeroes(unsigned long number, int base = 10) {
-            while(number > 0 && number % base == 0) {
-                number /= base;
-            }
-            return number;
-        }
-
         char *decimal_to_string_fixed(char *buf, long double number, int precision = -1, size_t start = 0, int base = 10, bool uppercase = false, bool showpoint = true)
         {
             unsigned long magnitude = (unsigned long)number;
