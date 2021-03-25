@@ -96,8 +96,8 @@ namespace dvb
         {
             // Safety
             *_M_out_cur = char_type();
-            // std::cout << _M_out_beg << std::flush;
             setp(acs, acs + __STREAMBUF_SIZE__);
+            // *_M_out_cur = char_type();
             return 0;
         }
 
@@ -184,7 +184,9 @@ namespace dvb
 
         int pubsync() { return this->sync(); }
 
-        char_type *pubgetbuf() { return _M_out_beg; }
+        char_type *pubgetbuf() {
+            return _M_out_beg;
+        }
 
         // Get area
 

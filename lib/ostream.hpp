@@ -4,6 +4,7 @@
 // #include <ostream>
 #include "ios.hpp"
 #include "bits/ostream_insert.hpp"
+#include "limits.hpp"
 
 namespace dvb
 {

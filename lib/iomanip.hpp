@@ -10,9 +10,10 @@ namespace dvb
     struct Resetiosflags
     {
         ios_base::fmtflags _M_mask;
+        Resetiosflags(ios_base::fmtflags mask) : _M_mask(mask) {}
     };
 
-    inline Resetiosflags resetiosflags(ios_base::fmtflags mask) { return {mask}; }
+    inline Resetiosflags resetiosflags(ios_base::fmtflags mask) { return mask; }
 
     template <typename CharT, typename Traits>
     inline basic_ostream<CharT, Traits> &
@@ -25,9 +26,10 @@ namespace dvb
     struct Setiosflags
     {
         ios_base::fmtflags _M_mask;
+        Setiosflags(ios_base::fmtflags mask) : _M_mask(mask) {}
     };
 
-    inline Setiosflags setiosflags(ios_base::fmtflags mask) { return {mask}; }
+    inline Setiosflags setiosflags(ios_base::fmtflags mask) { return mask; }
 
     template <typename CharT, typename Traits>
     inline basic_ostream<CharT, Traits> &
@@ -40,8 +42,9 @@ namespace dvb
     struct Setbase
     {
         int _M_base;
+        Setbase(int base) : _M_base(base) {}
     };
-    inline Setbase setbase(int base) { return {base}; }
+    inline Setbase setbase(int base) { return base; }
 
     template <typename CharT, typename Traits>
     inline basic_ostream<CharT, Traits> &
@@ -68,10 +71,11 @@ namespace dvb
     struct Setfill
     {
         CharT _M_c;
+        Setfill(CharT c) : _M_c(c) {}
     };
 
     template <typename CharT>
-    inline Setfill<CharT> setfill(CharT c) { return {c}; }
+    inline Setfill<CharT> setfill(CharT c) { return c; }
 
     template <typename CharT, typename Traits>
     inline basic_ostream<CharT, Traits> &
@@ -84,8 +88,9 @@ namespace dvb
     struct Setprecision
     {
         int _M_n;
+        Setprecision(int n) : _M_n(n) {}
     };
-    inline Setprecision setprecision(int n) { return {n}; }
+    inline Setprecision setprecision(int n) { return n; }
 
     template <typename CharT, typename Traits>
     inline basic_ostream<CharT, Traits> &
@@ -98,8 +103,9 @@ namespace dvb
     struct Setw
     {
         int _M_n;
+        Setw(int n) : _M_n(n) {}
     };
-    inline Setw setw(int n) { return {n}; }
+    inline Setw setw(int n) { return n; }
 
     template <typename CharT, typename Traits>
     inline basic_ostream<CharT, Traits> &

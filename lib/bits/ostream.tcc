@@ -157,7 +157,7 @@ namespace dvb
                 buf[start + digits - count_placed - 1] = dig;
             }
             start += digits;
-            for(size_t i = digits; i < min_digits; ++i)
+            for(int i = digits; i < min_digits; ++i)
                 buf[start++] = '0';
             buf[start] = '\0';
             return buf;
@@ -189,12 +189,8 @@ namespace dvb
         char *decimal_to_string_fixed(char *buf, long double number, int precision = -1, size_t start = 0, int base = 10, bool uppercase = false, bool showpoint = true)
         {
             unsigned long magnitude = (unsigned long)number;
-            unsigned long mantissa = get_mantissa(number, precision == -1 ? 8 : precision, base);
-            if(precision == -1)
-                mantissa = trim_trailing_zeroes(mantissa, base);
+            long double mantissa = number - magnitude;
             unsigned short mag_digits = count_digits(magnitude, (unsigned short)base);
-            unsigned short man_digits = count_digits(mantissa, (unsigned short)base);
-            man_digits = man_digits < precision ? precision : man_digits;
             for (unsigned short count_placed = 0; count_placed < mag_digits; ++count_placed)
             {
                 buf[start + mag_digits - count_placed - 1] = magnitude % base + '0';
@@ -205,14 +201,17 @@ namespace dvb
             start += mag_digits;
             if (showpoint || mantissa > 0)
                 buf[start++] = '.';
-            for (unsigned short count_placed = 0; count_placed < man_digits; ++count_placed)
+            long double prod;
+            char dig;
+            for (unsigned short count_placed = 0; (precision == -1 || count_placed < precision) && mantissa > 0; ++count_placed)
             {
-                buf[start + man_digits - count_placed - 1] = mantissa % base + '0';
-                if (buf[start + man_digits - count_placed - 1] >= '0' + 10)
-                    buf[start + man_digits - count_placed - 1] += (uppercase ? 'A' : 'a') - '0' - 10;
-                mantissa /= 10;
+                prod = mantissa * base;
+                dig = (unsigned long)prod + '0';
+                if(dig >= '0' + 10)
+                    dig += (uppercase ? 'A' : 'a') - '0' - 10;
+                buf[start++] = dig;
+                mantissa = prod - (unsigned long)prod;
             }
-            start += man_digits;
             buf[start] = '\0';
             return buf;
         }
@@ -238,12 +237,12 @@ namespace dvb
                     ++ret.exponent;
                 }
             }
-            else if (ret.number * base < 1)
+            else if (ret.number < 1)
             {
-                while (ret.number * base < 1)
+                while (ret.number < 1)
                 {
                     ret.number *= exp_base;
-                    ++ret.exponent;
+                    --ret.exponent;
                 }
             }
             return ret;
@@ -255,7 +254,8 @@ namespace dvb
             decimal_to_string_fixed(buf, sci.number, precision, start, 10, uppercase, showpoint);
             start = char_traits<char>::length(buf);
             buf[start++] = uppercase ? 'E' : 'e';
-            buf[start++] = sci.exponent > 0 ? '+' : '-';
+            buf[start++] = sci.exponent < 0 ? '-' : '+';
+            if(sci.exponent < 0) sci.exponent *= -1;
             return integer_to_string(buf, sci.exponent, 10, start, uppercase, 2);
         }
 
@@ -265,8 +265,9 @@ namespace dvb
             decimal_to_string_fixed(buf, sci.number, precision, start, 16, uppercase);
             start = char_traits<char>::length(buf);
             buf[start++] = uppercase ? 'P' : 'p';
-            buf[start++] = sci.exponent > 0 ? '+' : '-';
-            return integer_to_string(buf, sci.exponent, 10, start, uppercase, 2);
+            buf[start++] = sci.exponent < 0 ? '-' : '+';
+            if(sci.exponent < 0) sci.exponent *= -1;
+            return integer_to_string(buf, sci.exponent, 10, start, uppercase);
         }
 
         char *decimal_to_string_default(char *buf, long double number, int precision, bool showpoint, size_t start = 0, bool uppercase = false)
@@ -308,6 +309,7 @@ namespace dvb
     template <typename CharT, typename Traits>
     void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, long value)
     {
+        (void)fill;
         const typename ios_base::fmtflags flags = os.flags();
         const unsigned max_num_size = sizeof(long) * CHAR_BIT + 1 + 2;
         char n[max_num_size];
@@ -330,25 +332,25 @@ namespace dvb
                 break;
             case ios_base::hex:
                 n[index++] = '0';
-                n[index++] = (flags & ios_base::uppercase != 0) ? 'X' : 'x';
+                n[index++] = (flags & ios_base::uppercase) != 0 ? 'X' : 'x';
                 break;
             default:
                 n[index++] = '0';
-                n[index++] = (flags & ios_base::uppercase != 0) ? 'B' : 'b';
+                n[index++] = (flags & ios_base::uppercase) != 0 ? 'B' : 'b';
             }
         switch (flags & ios_base::basefield)
         {
         case ios_base::dec:
-            dmath::integer_to_string(n, value, 10, index, flags & ios_base::uppercase != 0);
+            dmath::integer_to_string(n, value, 10, index, (flags & ios_base::uppercase) != 0);
             break;
         case ios_base::oct:
-            dmath::integer_to_string(n, value, 8, index, flags & ios_base::uppercase != 0);
+            dmath::integer_to_string(n, value, 8, index, (flags & ios_base::uppercase) != 0);
             break;
         case ios_base::hex:
-            dmath::integer_to_string(n, value, 16, index, flags & ios_base::uppercase != 0);
+            dmath::integer_to_string(n, value, 16, index, (flags & ios_base::uppercase) != 0);
             break;
         default:
-            dmath::integer_to_string(n, value, 2, index, flags & ios_base::uppercase != 0);
+            dmath::integer_to_string(n, value, 2, index, (flags & ios_base::uppercase) != 0);
         }
         os << n;
         if ((flags & ios_base::unitbuf) != 0)
@@ -375,25 +377,25 @@ namespace dvb
                 break;
             case ios_base::hex:
                 n[index++] = '0';
-                n[index++] = (flags & ios_base::uppercase != 0) ? 'X' : 'x';
+                n[index++] = (flags & ios_base::uppercase) != 0 ? 'X' : 'x';
                 break;
             default:
                 n[index++] = '0';
-                n[index++] = (flags & ios_base::uppercase != 0) ? 'B' : 'b';
+                n[index++] = (flags & ios_base::uppercase) != 0 ? 'B' : 'b';
             }
         switch (flags & ios_base::basefield)
         {
         case ios_base::dec:
-            dmath::integer_to_string(n, value, 10, index, flags & ios_base::uppercase != 0);
+            dmath::integer_to_string(n, value, 10, index, (flags & ios_base::uppercase) != 0);
             break;
         case ios_base::oct:
-            dmath::integer_to_string(n, value, 8, index, flags & ios_base::uppercase != 0);
+            dmath::integer_to_string(n, value, 8, index, (flags & ios_base::uppercase) != 0);
             break;
         case ios_base::hex:
-            dmath::integer_to_string(n, value, 16, index, flags & ios_base::uppercase != 0);
+            dmath::integer_to_string(n, value, 16, index, (flags & ios_base::uppercase) != 0);
             break;
         default:
-            dmath::integer_to_string(n, value, 2, index, flags & ios_base::uppercase != 0);
+            dmath::integer_to_string(n, value, 2, index, (flags & ios_base::uppercase) != 0);
         }
         os << n;
         if ((flags & ios_base::unitbuf) != 0)
@@ -403,6 +405,7 @@ namespace dvb
     template <typename CharT, typename Traits>
     void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, double value)
     {
+        (void)fill;
         const typename ios_base::fmtflags flags = os.flags();
         char n[__MAX_DOUBLE_DIGITS__];
         Traits::assign(n, __MAX_DOUBLE_DIGITS__, 0);
@@ -417,21 +420,18 @@ namespace dvb
         switch (flags & ios_base::floatfield)
         {
         case ios_base::floatfield:
-            if (flags & ios_base::showbase)
-            {
-                n[index++] = '0';
-                n[index++] = (flags & ios_base::uppercase != 0) ? 'X' : 'x';
-            }
-            dmath::decimal_to_string_hexfloat(n, value, os.precision(), index, flags & ios_base::uppercase != 0);
+            n[index++] = '0';
+            n[index++] = (flags & ios_base::uppercase) != 0 ? 'X' : 'x';
+            dmath::decimal_to_string_hexfloat(n, value, numeric_limits<double>::digits10, index, (flags & ios_base::uppercase) != 0);
             break;
         case ios_base::fixed:
             dmath::decimal_to_string_fixed(n, value, os.precision(), index);
             break;
         case ios_base::scientific:
-            dmath::decimal_to_string_scientific(n, value, os.precision(), index, flags & ios_base::uppercase != 0);
+            dmath::decimal_to_string_scientific(n, value, os.precision(), index, (flags & ios_base::uppercase) != 0);
             break;
         default:
-            dmath::decimal_to_string_default(n, value, os.precision(), flags & ios_base::showpoint != 0, index, flags & ios_base::uppercase != 0);
+            dmath::decimal_to_string_default(n, value, os.precision(), (flags & ios_base::showpoint) != 0, index, (flags & ios_base::uppercase) != 0);
             break;
         }
         os << n;
@@ -456,21 +456,18 @@ namespace dvb
         switch (flags & ios_base::floatfield)
         {
         case ios_base::floatfield:
-            if (flags & ios_base::showbase)
-            {
-                n[index++] = '0';
-                n[index++] = (flags & ios_base::uppercase != 0) ? 'X' : 'x';
-            }
-            dmath::decimal_to_string_hexfloat(n, value, os.precision(), index, flags & ios_base::uppercase != 0);
+            n[index++] = '0';
+            n[index++] = (flags & ios_base::uppercase) != 0 ? 'X' : 'x';
+            dmath::decimal_to_string_hexfloat(n, value, numeric_limits<long double>::digits10, index, (flags & ios_base::uppercase) != 0);
             break;
         case ios_base::fixed:
             dmath::decimal_to_string_fixed(n, value, os.precision(), index);
             break;
         case ios_base::scientific:
-            dmath::decimal_to_string_scientific(n, value, os.precision(), index, flags & ios_base::uppercase != 0);
+            dmath::decimal_to_string_scientific(n, value, os.precision(), index, (flags & ios_base::uppercase) != 0);
             break;
         default:
-            dmath::decimal_to_string_default(n, value, os.precision(), flags & ios_base::showpoint != 0, index, flags & ios_base::uppercase != 0);
+            dmath::decimal_to_string_default(n, value, os.precision(), (flags & ios_base::showpoint) != 0, index, (flags & ios_base::uppercase) != 0);
             break;
         }
         os << n;
@@ -487,8 +484,8 @@ namespace dvb
         Traits::assign(n, max_num_size + 1 + 2, 0);
         int index = 0;
         n[index++] = '0';
-        n[index++] = flags & ios_base::uppercase != 0 ? 'X' : 'x';
-        dmath::integer_to_string(n, (unsigned long)value, 16, index, flags & ios_base::uppercase != 0, max_num_size);
+        n[index++] = (flags & ios_base::uppercase) != 0 ? 'X' : 'x';
+        dmath::integer_to_string(n, (unsigned long)value, 16, index, (flags & ios_base::uppercase) != 0, max_num_size);
         os << n;
         if ((flags & ios_base::unitbuf) != 0)
             os << flush;
