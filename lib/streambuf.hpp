@@ -28,6 +28,8 @@
 #include "iosfwd.hpp"
 #include "bits/ios_base.hpp"
 #include "climits.hpp"
+
+#include "../console.H"
 // Used for testing outside of VM
 // #include <iostream>
 
@@ -108,7 +110,8 @@ namespace dvb
             // Safety
             *_M_out_cur = char_type();
             setp(acs, acs + __STREAMBUF_SIZE__);
-            // *_M_out_cur = char_type();
+            Console::puts(pbase());
+            *_M_out_cur = char_type();
             return 0;
         }
 
@@ -183,7 +186,7 @@ namespace dvb
 
         // virtual int_type pbackfail(int_type c = Traits::eof());
     public:
-        virtual ~basic_streambuf() {}
+        // virtual ~basic_streambuf() {}
 
         // Positioning
 
@@ -195,7 +198,8 @@ namespace dvb
 
         int pubsync() { return this->sync(); }
 
-        char_type *pubgetbuf() {
+        char_type *pubgetbuf()
+        {
             return _M_out_beg;
         }
 

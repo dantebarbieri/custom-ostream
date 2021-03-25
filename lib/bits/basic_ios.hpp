@@ -45,7 +45,7 @@ namespace dvb
 
             _M_tie = 0;
             _M_streambuf = sb;
-            _M_streambuf_state = sb ? goodbit : badbit;
+            _M_streambuf_state = sb ? (dvb::ios_base::iostate)0 : (dvb::ios_base::iostate)1;
             _M_flags = skipws | dec;
             _M_precision = 6;
             _M_width = 0;
@@ -54,7 +54,7 @@ namespace dvb
 
     public:
         explicit basic_ios(dvb::basic_streambuf<CharT, Traits> *sb) : ios_base(), _M_tie(0), _M_fill(), _M_fill_init(false), _M_streambuf(0) { this->init(sb); }
-        virtual ~basic_ios() {}
+        // virtual ~basic_ios() { }
         iostate rdstate() const { return _M_streambuf_state; }
         bool good() const { return this->rdstate() == 0; }
         bool eof() const { return (this->rdstate() & eofbit) != 0; }

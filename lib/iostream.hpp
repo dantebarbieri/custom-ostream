@@ -46,15 +46,14 @@ namespace dvb
             clog.tie(&cout);
         }
     }
-    ios_base::Init::~Init()
-    {
-        --_S_refcount;
-        if (_S_refcount == 0)
-            cout.flush();
-    }
+    // ios_base::Init::~Init()
+    // {
+    //     --_S_refcount;
+    //     if (_S_refcount == 0)
+    //         cout.flush();
+    // }
 
     static ios_base::Init __ioinit;
-
 }
 
 #endif

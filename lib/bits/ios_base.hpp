@@ -254,7 +254,7 @@ namespace dvb
         ios_base() {}
 
     public:
-        virtual ~ios_base() {}
+        // virtual ~ios_base() {}
         fmtflags flags() const { return _M_flags; }
         fmtflags flags(fmtflags flags)
         {
@@ -346,7 +346,7 @@ namespace dvb
 
     public:
         Init();
-        ~Init();
+        // ~Init();
 
     private:
         static int _S_refcount;

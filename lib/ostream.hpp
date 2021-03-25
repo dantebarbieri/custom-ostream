@@ -52,7 +52,7 @@ namespace dvb
         class sentry;
         friend class sentry;
         explicit basic_ostream(basic_streambuf<CharT, Traits> *sb) : basic_ios<CharT, Traits>() { this->init(sb); }
-        virtual ~basic_ostream() {}
+        // virtual ~basic_ostream() {}
         // inserts formatted data
         basic_ostream &operator<<(short value);
         // inserts formatted data
