@@ -15,6 +15,8 @@
 #include "bits/c++config.hpp"
 #include "ostream.hpp"
 
+#include "../console.H"
+
 namespace dvb
 {
     extern streambuf cout_buf;
@@ -38,6 +40,8 @@ namespace dvb
         ++_S_refcount;
         if (_S_refcount == 1)
         {
+            Console::init();
+
             cerr.flags(cerr.flags() | unitbuf);
 
             cerr.tie(&cout);
