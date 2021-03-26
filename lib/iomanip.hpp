@@ -31,6 +31,8 @@ namespace dvb
     inline basic_ostream<CharT, Traits> &
     operator<<(basic_ostream<CharT, Traits> &os, Setforegroundcolor foreground)
     {
+        typename basic_ostream<CharT, Traits>::sentry cerb(os);
+        (void)cerb;
         os.flush();
         Console::set_TextColor(foreground.fore, Console::get_BackColor());
         return os;
@@ -47,6 +49,8 @@ namespace dvb
     inline basic_ostream<CharT, Traits> &
     operator<<(basic_ostream<CharT, Traits> &os, Setbackgroundcolor background)
     {
+        typename basic_ostream<CharT, Traits>::sentry cerb(os);
+        (void)cerb;
         os.flush();
         Console::set_TextColor(Console::get_ForeColor(), background.back);
         return os;
@@ -69,6 +73,8 @@ namespace dvb
     inline basic_ostream<CharT, Traits> &
     operator<<(basic_ostream<CharT, Traits> &os, Setcolor colors)
     {
+        typename basic_ostream<CharT, Traits>::sentry cerb(os);
+        (void)cerb;
         os.flush();
         Console::set_TextColor(colors.fore, colors.back);
         return os;

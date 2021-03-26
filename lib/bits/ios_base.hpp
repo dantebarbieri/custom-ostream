@@ -333,8 +333,6 @@ namespace dvb
         static const seekdir end = _S_end;
         static const seekdir cur = _S_cur;
     };
-
-    int ios_base::index = 0;
 }
 
 namespace dvb
@@ -347,14 +345,12 @@ namespace dvb
     public:
         Init();
         // ~Init();
+        static int _S_refcount;
 
     private:
-        static int _S_refcount;
         static bool _S_synced_with_stdio;
     };
 
-    int ios_base::Init::_S_refcount = 0;
-    bool ios_base::Init::_S_synced_with_stdio = false;
 }
 
 namespace dvb

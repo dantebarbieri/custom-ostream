@@ -59,6 +59,8 @@ namespace dvb
                 ostream_write(out, s, count);
             out.width(0);
         }
+        if((out.flags() & ios_base::unitbuf) != 0)
+                out.flush();
         return out;
     }
 }

@@ -27,32 +27,17 @@ namespace dvb
     extern ostream cerr;
     extern ostream clog;
 
-    streambuf cout_buf;
-    streambuf cerr_buf;
-    streambuf clog_buf;
-
-    ostream cout(&cout_buf);
-    ostream cerr(&cerr_buf);
-    ostream clog(&clog_buf);
-
-    ios_base::Init::Init()
+    inline dvb::ios_base::Init::Init()
     {
-        ++_S_refcount;
-        if (_S_refcount == 1)
+        if (++_S_refcount >= 1)
         {
             Console::init();
 
-            cerr.flags(cerr.flags() | unitbuf);
+            cerr.setf(unitbuf);
 
             cerr.tie(&cout);
         }
     }
-    // ios_base::Init::~Init()
-    // {
-    //     --_S_refcount;
-    //     if (_S_refcount == 0)
-    //         cout.flush();
-    // }
 
     static ios_base::Init __ioinit;
 }

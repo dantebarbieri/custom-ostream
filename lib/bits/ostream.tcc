@@ -142,7 +142,7 @@ namespace dvb
 
     namespace dmath
     {
-        unsigned short count_digits(unsigned long number, unsigned short base = 10)
+        inline unsigned short count_digits(unsigned long number, unsigned short base = 10)
         {
             unsigned short digits = 0;
             do
@@ -153,7 +153,7 @@ namespace dvb
             return digits;
         }
 
-        char *integer_to_string(char *buf, unsigned long number, unsigned short base = 10, size_t start = 0, bool uppercase = false, int min_digits = 0, bool fill_left = true)
+        inline char *integer_to_string(char *buf, unsigned long number, unsigned short base = 10, size_t start = 0, bool uppercase = false, int min_digits = 0, bool fill_left = true)
         {
             unsigned short digits = count_digits(number, base);
             if(fill_left)
@@ -174,12 +174,12 @@ namespace dvb
             return buf;
         }
 
-        unsigned long round(long double number)
+        inline unsigned long round(long double number)
         {
             return (unsigned long)(number + 0.5);
         }
 
-        char *decimal_to_string_fixed(char *buf, long double number, int precision = -1, size_t start = 0, int base = 10, bool uppercase = false, bool showpoint = true)
+        inline char *decimal_to_string_fixed(char *buf, long double number, int precision = -1, size_t start = 0, int base = 10, bool uppercase = false, bool showpoint = true)
         {
             unsigned long magnitude = (unsigned long)number;
             long double mantissa = number - magnitude;
@@ -215,7 +215,7 @@ namespace dvb
             int exponent;
         };
 
-        scientific number_to_scientific(long double number, int base = 10, int exp_base = -1)
+        inline scientific number_to_scientific(long double number, int base = 10, int exp_base = -1)
         {
             if (exp_base == -1)
                 exp_base = base;
@@ -241,7 +241,7 @@ namespace dvb
             return ret;
         }
 
-        char *decimal_to_string_scientific(char *buf, long double number, int precision, size_t start = 0, bool uppercase = false, bool showpoint = true)
+        inline char *decimal_to_string_scientific(char *buf, long double number, int precision, size_t start = 0, bool uppercase = false, bool showpoint = true)
         {
             scientific sci = number_to_scientific(number, 10);
             decimal_to_string_fixed(buf, sci.number, precision, start, 10, uppercase, showpoint);
@@ -252,7 +252,7 @@ namespace dvb
             return integer_to_string(buf, sci.exponent, 10, start, uppercase, 2);
         }
 
-        char *decimal_to_string_hexfloat(char *buf, long double number, int precision, size_t start = 0, bool uppercase = false)
+        inline char *decimal_to_string_hexfloat(char *buf, long double number, int precision, size_t start = 0, bool uppercase = false)
         {
             scientific sci = number_to_scientific(number, 16, 2);
             decimal_to_string_fixed(buf, sci.number, precision, start, 16, uppercase);
@@ -263,7 +263,7 @@ namespace dvb
             return integer_to_string(buf, sci.exponent, 10, start, uppercase);
         }
 
-        char *decimal_to_string_default(char *buf, long double number, int precision, bool showpoint, size_t start = 0, bool uppercase = false)
+        inline char *decimal_to_string_default(char *buf, long double number, int precision, bool showpoint, size_t start = 0, bool uppercase = false)
         {
             // I hate myself
             const long ten_to_five = 10 * 10 * 10 * 10 * 10;
@@ -281,7 +281,7 @@ namespace dvb
     }
 
     template <typename CharT, typename Traits>
-    void do_put(basic_ostream<CharT, Traits> &os, CharT fill, bool value)
+    inline void do_put(basic_ostream<CharT, Traits> &os, CharT fill, bool value)
     {
         const ios_base::fmtflags flags = os.flags();
         if ((flags & ios_base::boolalpha) == 0)
@@ -300,7 +300,7 @@ namespace dvb
     }
 
     template <typename CharT, typename Traits>
-    void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, long value)
+    inline void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, long value)
     {
         (void)fill;
         const typename ios_base::fmtflags flags = os.flags();
@@ -351,7 +351,7 @@ namespace dvb
     }
 
     template <typename CharT, typename Traits>
-    void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, unsigned long value)
+    inline void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, unsigned long value)
     {
         const typename ios_base::fmtflags flags = os.flags();
         const unsigned max_num_size = sizeof(long) * CHAR_BIT + 1 + 2;
@@ -396,7 +396,7 @@ namespace dvb
     }
 
     template <typename CharT, typename Traits>
-    void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, double value)
+    inline void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, double value)
     {
         (void)fill;
         const typename ios_base::fmtflags flags = os.flags();
@@ -433,7 +433,7 @@ namespace dvb
     }
 
     template <typename CharT, typename Traits>
-    void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, long double value)
+    inline void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, long double value)
     {
         const typename ios_base::fmtflags flags = os.flags();
         char n[__MAX_DOUBLE_DIGITS__];
@@ -469,7 +469,7 @@ namespace dvb
     }
 
     template <typename CharT, typename Traits>
-    void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, const void *value)
+    inline void do_put(basic_ostream<CharT, Traits> &os, typename Traits::char_type fill, const void *value)
     {
         const typename ios_base::fmtflags flags = os.flags();
         const unsigned max_num_size = sizeof(value) * CHAR_BIT / 4;
