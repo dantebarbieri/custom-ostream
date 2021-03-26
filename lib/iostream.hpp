@@ -38,12 +38,9 @@ namespace dvb
         ++_S_refcount;
         if (_S_refcount == 1)
         {
-            cout.flags(dec | left);
-            cerr.flags(cout.flags() | unitbuf);
-            clog.flags(cout.flags());
+            cerr.flags(cerr.flags() | unitbuf);
 
             cerr.tie(&cout);
-            clog.tie(&cout);
         }
     }
     // ios_base::Init::~Init()

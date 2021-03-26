@@ -16,8 +16,64 @@
 #include "iosfwd.hpp"
 #include "bits/ios_base.hpp"
 
+#include "../console.H"
+
 namespace dvb
 {
+    struct Setforegroundcolor {
+        COLOR_CODE fore;
+        Setforegroundcolor(COLOR_CODE f) : fore(f) {}
+    };
+
+    inline Setforegroundcolor setforeground(COLOR_CODE color = WHITE) { return color; }
+
+    template <typename CharT, typename Traits>
+    inline basic_ostream<CharT, Traits> &
+    operator<<(basic_ostream<CharT, Traits> &os, Setforegroundcolor foreground)
+    {
+        os.flush();
+        Console::set_TextColor(foreground.fore, Console::get_BackColor());
+        return os;
+    }
+
+    struct Setbackgroundcolor {
+        COLOR_CODE back;
+        Setbackgroundcolor(COLOR_CODE b) : back(b) {}
+    };
+
+    inline Setbackgroundcolor setbackground(COLOR_CODE color = BLACK) { return color; }
+
+    template <typename CharT, typename Traits>
+    inline basic_ostream<CharT, Traits> &
+    operator<<(basic_ostream<CharT, Traits> &os, Setbackgroundcolor background)
+    {
+        os.flush();
+        Console::set_TextColor(Console::get_ForeColor(), background.back);
+        return os;
+    }
+
+    struct Setcolor {
+        COLOR_CODE fore;
+        COLOR_CODE back;
+        Setcolor(COLOR_CODE f, COLOR_CODE b) : fore(f), back(b) {}
+    };
+
+    inline Setcolor setcolor(COLOR_CODE foreground = WHITE, COLOR_CODE background = BLACK) {
+        Setcolor ret(COLOR_CODE(0), COLOR_CODE(0));
+        ret.fore = foreground;
+        ret.back = background;
+        return ret;
+    }
+
+    template <typename CharT, typename Traits>
+    inline basic_ostream<CharT, Traits> &
+    operator<<(basic_ostream<CharT, Traits> &os, Setcolor colors)
+    {
+        os.flush();
+        Console::set_TextColor(colors.fore, colors.back);
+        return os;
+    }
+
     struct Resetiosflags
     {
         ios_base::fmtflags _M_mask;
